@@ -1,0 +1,50 @@
+<style type="text/css">
+.popup-box {
+	background-color: #ffffff;
+	border: 1px solid #b0b0b0;
+	bottom: 0;
+/* 	display: none; */
+	height: 600px;
+	position: fixed;
+	right: 70px;
+	width: 500px;
+	font-family: 'Open Sans', sans-serif;
+}
+
+.popup-box-on {
+/* 	display: block !important; */
+}
+
+/* buton on the right	 */
+.pushcrew-side-button {
+	height: auto !important;
+	position: fixed !important;
+	padding: 10px !important;
+	color: #fff;
+	font-size: 17px !important;
+	font-family: Arial !important;
+	background-color: #4d9de0 !important;
+	border-radius: 10px !important;
+	word-spacing: 2px !important;
+	max-width: 250px !important;
+	z-index: 2147483647 !important;
+	box-sizing: content box !important;
+	line-height: 1.2 !important;
+	cursor: pointer !important;
+}
+
+.pushcrew-chicklet-position-tr {
+	top: 100px;
+	right: 0;
+	-webkit-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+	transform-origin: bottom right;
+}
+</style>
+
+<div class="pushcrew-side-button pushcrew-chicklet-position-tr"
+	onclick=" $('#frameChatBox').fadeToggle()">
+	<div>{{'footer.chat' | translate}}</div>
+</div>
+<iframe id="frameChatBox" class="popup-box popup-box-on" width="1000" height="800" style="display: none; z-index:100">
+</iframe>

@@ -2,15 +2,15 @@
 
 var loginController = function ($state, $scope, userService){
 	function init(){
-		//check have login or not
+		//check wheather user already login or not
 		if($scope.isAuthenticated()){
 			$state.go("home");
 		}
 		
 		//init user model
 		$scope.user = 	{
-				username: "team1@fit.com",
-				password: "P@ssword123"
+				username: "seval@test.com",
+				password: "12345"
 		};
 	}
 	

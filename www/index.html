@@ -2,7 +2,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Online Judge</title>
+		<title>Nông dân thông thái</title>
 		<link rel="stylesheet" href="resources/css/bootstrap/bootstrap.css">
 		<link rel="stylesheet" href="resources/css/custom/custom.css">
 		<link rel="stylesheet" href="resources/css/custom/slideout.css">
@@ -29,7 +29,7 @@
 		<script type="text/javascript" src="resources/js/lib/slideout.js"></script>
 		<script type="text/javascript" src="cordova.js"></script>
 	</head> 
-	<body ng-app="onlinejudgeApp" ng-controller="mainController" id="onlinejudgeApp" data-gr-c-s-loaded="true">
+	<body ng-app="app" ng-controller="mainController" id="onlinejudgeApp" data-gr-c-s-loaded="true">
 		<div id="ipos-full-loading" class="ipos_popup_overlay" style="
 	    width: 100%;
 	    height: 100%;
@@ -48,25 +48,8 @@
 				</div>
 			</div>
 		</div>
-		<nav id="menu" class="menu">
-			<header>
-				<a ui-sref="home"><span class="glyphicon glyphicon-user"></span>Trang chủ</a>
-			</header>
-			<h3 class="menu-section-title">Chức năng</h3>
-			<ul class="menu-section-list">
-			  <li><a>Chức năng 1</a></li>
-			  <li><a>Chức năng 2</a></li>
-			  <li><a>Chức năng 2</a></li>
-			  <li><a>Chức năng 3</a></li>
-			</ul>
-		  
-		  <section class="menu-section">
-			<h3 class="menu-section-title">Tài khoản</h3>
-			<ul class="menu-section-list" ng-if="!isAuthenticated()">
-			  <li><a ui-sref="register"><span class="glyphicon glyphicon-user"></span>Đăng ký</a></li>
-			  <li><a ui-sref="login"><span class="glyphicon glyphicon-log-in"></span>Đăng nhập</a></li>
-			</ul>
-		  </section>
+		<nav id="menu" class="menu" ui-view="left-menu">
+			
 		</nav>
 		<main id="panel" >
 			<header>
@@ -83,15 +66,13 @@
 		<script type="text/javascript" src="resources/js/core/common/common-core.js"></script>
 		<script type="text/javascript" src="resources/js/core/common/common-directive.js"></script>
 		<script type="text/javascript" src="resources/js/core/app.js"></script>
-		<script type="text/javascript" src="resources/js/core/controller/login-ctrl.js"></script>
 		<script type="text/javascript" src="resources/js/core/controller/register-ctrl.js"></script>
-		<script type="text/javascript" src="resources/js/core/controller/problem-ctrl.js"></script>
-		<script type="text/javascript" src="resources/js/core/controller/contest-ctrl.js"></script>
-		<script type="text/javascript" src="resources/js/core/controller/student-contest-ctrl.js"></script>
 		<script type="text/javascript" src="resources/js/core/service/user-service.js"></script>
-		<script type="text/javascript" src="resources/js/core/service/problem-service.js"></script>
-		<script type="text/javascript" src="resources/js/core/service/contest-service.js"></script>
-		<script type="text/javascript" src="resources/js/core/service/team-service.js"></script>
-	
-
-</body></html>
+		<script type="text/javascript" src="resources/js/core/service/unit-service.js"></script>
+		<script type="text/javascript" src="resources/js/core/service/qrscanner-service.js"></script>
+		<script type="text/javascript" src="resources/js/core/service/capture-service.js"></script>
+		<script type="text/javascript" src="resources/js/core/controller/login-ctrl.js"></script>
+		<script type="text/javascript" src="resources/js/core/controller/left-menu-ctrl.js"></script>
+		<script type="text/javascript" src="resources/js/core/controller/write-log-ctrl.js"></script>
+	</body>
+</html>

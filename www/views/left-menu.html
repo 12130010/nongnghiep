@@ -1,0 +1,22 @@
+<header>
+	<a ui-sref="home"><span class="glyphicon glyphicon-user"></span>Trang chủ</a>
+</header>
+<h3 class="menu-section-title">Chức năng</h3>
+<ul class="menu-section-list">
+  <li><a>Chức năng 1</a></li>
+  <li><a>Chức năng 2</a></li>
+  <li><a>Chức năng 2</a></li>
+  <li><a>Chức năng 3</a></li>
+</ul>
+
+<section class="menu-section">
+<h3 class="menu-section-title">Tài khoản</h3>
+<ul class="menu-section-list" ng-if="!isAuthenticated()">
+  <li><a ui-sref="home.register"><span class="glyphicon glyphicon-user"></span> Đăng ký</a></li>
+  <li><a ui-sref="home.login"><span class="glyphicon glyphicon-log-in"></span> Đăng nhập</a></li>
+</ul>
+<ul class="menu-section-list" ng-if="isAuthenticated()">
+  <li><a ui-sref="home.user"><span class="glyphicon glyphicon-user"></span> {{userDetail.name}}</a></li>
+  <li><a ng-click="logout()"><span class="glyphicon glyphicon-log-in"></span> Đăng xuất</a></li>
+</ul>
+</section>

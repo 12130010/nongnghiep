@@ -5,7 +5,7 @@
  */
 'use strict';
 
-var onlinejudgeApp = angular.module('onlinejudgeApp', 
+var app = angular.module('app', 
 							[
 							  'ui.router',
 							  'ui.router.state',
@@ -14,10 +14,9 @@ var onlinejudgeApp = angular.module('onlinejudgeApp',
 							  'ncy-angular-breadcrumb',
 							  'commonModule',
 							  'angularUtils.directives.dirPagination',
-							  'ngMaterial',
-							  'pascalprecht.translate'
+							  'ngMaterial'
 							]);
-onlinejudgeApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 		$urlRouterProvider.otherwise("/");
 		$stateProvider
 		.state('home', {
@@ -25,14 +24,18 @@ onlinejudgeApp.config(['$stateProvider', '$urlRouterProvider', function($statePr
 			views: {
 				'main@': {
 					templateUrl: 'views/home.html',
+				},
+				'left-menu': {
+					templateUrl: 'views/left-menu.html',
+					controller: leftMenuController
 				}
 			},
 			ncyBreadcrumb: {
 				label: "Trang chủ"
 			}
 		})
-		.state('login', {
-			url: '/login',
+		.state('home.login', {
+			url: 'login',
 			views: {
 				'main@': {
 					templateUrl: 'views/login.html',
@@ -43,8 +46,8 @@ onlinejudgeApp.config(['$stateProvider', '$urlRouterProvider', function($statePr
 			    label: "Đăng nhập"
 			}
 		})
-		.state('register', {
-			url: '/register',
+		.state('home.register', {
+			url: 'register',
 			views: {
 				'main@': {
 					templateUrl: 'views/register.html',
@@ -53,6 +56,18 @@ onlinejudgeApp.config(['$stateProvider', '$urlRouterProvider', function($statePr
 			},
 			ncyBreadcrumb: {
 				label: "Đăng ký"
+			}
+		})
+		.state('home.writelog', {
+			url: 'writelog',
+			views: {
+				'main@': {
+					templateUrl: 'views/write-log.html',
+					controller: writeLogController
+				}
+			},
+			ncyBreadcrumb: {
+				label: "Ghi nhật ký"
 			}
 		})
 	}
@@ -74,7 +89,7 @@ onlinejudgeApp.config(['$stateProvider', '$urlRouterProvider', function($statePr
 	 
 	 $rootScope.logout = function logout(){
 		 userService.logout().then(function success(){
-			 $state.go("login");
+			 $state.go("home.login");
 		 });
 	 }
 	 

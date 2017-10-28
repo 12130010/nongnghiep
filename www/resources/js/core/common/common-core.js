@@ -5,119 +5,90 @@
 var commonModule = angular.module('commonModule', [])
 .provider('commonService', function (){
 	this.urlMap = {
-			// USER MS
-			"USER_CHECK_USER_IS_EXIST" : {
-				"baseUrl" : "onlinejudge-ms-user/checkUserIsExist?username={0}",
-				"params" : ["username"]
-			},
-			"USER_GET_USER_DETAIL" : {
-				"baseUrl" : "onlinejudge-ms-user/users?email={0}",
-				"params" : ["email"]
-			},
-			"USER_CREATE_NEW_USER" : {
-				"baseUrl" : "onlinejudge-ms-user/users",
-				"params" : []
-			},
-			// CONTEST MS - PROBLEM
-			"CONTEST_GET_ALL_PROBLEM" : {
-				"baseUrl" : "onlinejudge-ms-contest/problems",
-				"params" : []
-			},
-			"CONTEST_SAVE_PROBLEM" : {
-				"baseUrl" : "onlinejudge-ms-contest/problems",
-				"params" : []
-			},
-			"CONTEST_SAVE_FILE_OF_PROBLEM" : {
-				"baseUrl" : "onlinejudge-ms-contest/problems/upfile",
-				"params" : []
-			},
-			"CONTEST_DELETE_PROBLEM" : {
-				"baseUrl" : "onlinejudge-ms-contest/problems/delete",
-				"params" : []
-			}
-			// CONTEST MS - CONTEST
-			,
-			"CONTEST_GET_ALL_CONTEST" : {
-				"baseUrl" : "onlinejudge-ms-contest/contests",
-				"params" : []
-			},
-			"CONTEST_ADD_CONTEST" : {
-				"baseUrl" : "onlinejudge-ms-contest/contests",
-				"params" : []
-			},
-			"CONTEST_DELETE_CONTEST" : {
-				"baseUrl" : "onlinejudge-ms-contest/contests/{0}/delete",
-				"params" : ["contestID"]
-			}
-			// CONTEST MS - TEAM
-			,
-			"CONTEST_ADD_TEAM_CONTEST" : {
-				"baseUrl" : "onlinejudge-ms-contest/contests/{0}/addteam",
-				"params" : ["contestID"]
-			}
-			,
-			"CONTEST_DELETE_TEAM_CONTEST" : {
-				"baseUrl" : "onlinejudge-ms-contest//contest/{0}/delete_team/{1}",
-				"params" : ["contestID","teamID"]
-			}
-			// CONTEST MS - PROBLEM
-			,
-			"CONTEST_UPDATE_PROBLEM_CONTEST" : {
-				"baseUrl" : "onlinejudge-ms-contest/contests/{0}/problems",
-				"params" : ["contestID"]
-			}
-			
-			//CONTEST MS - USER
-			,
-			"CONTEST_USER_GET_ALL_CONTEST" : {
-				"baseUrl" : "onlinejudge-ms-contest/contests/contest_as_member",
-				"params" : []
-			},
-			"CONTEST_USER_GET_DETAIL_CONTEST" : {
-				"baseUrl" : "onlinejudge-ms-contest/contest/{0}",
-				"params" : ["contestId"]
-			}
-			
-			//RESOURCE
-			,
-			"RESOURCE_GENERATE_TOKEN" : {
-				"baseUrl" : "onlinejudge-ms-resources/generateToken",
-				"params" : []
-			}
-			,
-			"RESOURCE_GET_RESOURCE" : {
-				"baseUrl" : "onlinejudge-ms-resources/getResource?token={0}",
-				"params" : ["token"]
-			}
-			
-			//JUDGE HOST
-			,
-			"JUDGE_SUBMIT_PROBLEM" : {
-				"baseUrl" : "/onlinejudge-ms-judge/submit",
-				"params" : []
-			}
-			//CONTEST MS - TEAM
-			,
-			"CONTEST_TEAM_GET_TEAM_DETAIL" : {
-				"baseUrl" : "onlinejudge-ms-contest/contest/{0}/team",
-				"params" : []
-			}
-			
-			
-			
+		// User Service
+		"USER_LOGIN" : {
+			"baseUrl" : "?tag=login&email={0}&password={1}",
+			"params" : ["email", "password"]
+		},
+		"UNIT_GET" : {
+			"baseUrl" : "/unit/{0}",
+			"params" : ["unitId"]
+		},
+		"UNIT_ADD_HISTORY" : {
+			"baseUrl" : "/action/",
+			"params" : []
+		}
 	}
 	
 	this.CONSTANTS = {
 			
 	}
 	
+	this.dataConfig = {
+		action : {
+			tt: [
+				{
+					key : 'trong',
+					text : 'Trồng',
+					needImage : true
+				},
+				{
+					key : 'tuoi',
+					text : 'Tưới'
+				},
+				{
+					key : 'xit_thuoc',
+					text : 'Xịt thuốc'
+				},
+				{
+					key : 'cham_soc',
+					text : 'Chăm sóc'
+				},
+				{
+					key : 'thu_hoach',
+					text : 'Thu hoạch'
+				}
+			],
+			cn: [
+				{
+					key : 'cho_an',
+					text : 'Cho ăn',
+					needImage : true
+				},
+				{
+					key : 'chich_thuoc',
+					text : 'Chích thuốc'
+				},
+				{
+					key : 'tam',
+					text : 'Tắm'
+				}
+			],
+			ts: [
+				{
+					key : 'cho_an',
+					text : 'Cho ăn'
+				},
+				{
+					key : 'don_ho',
+					text : 'Dọn hồ'
+				},
+				{
+					key : 'quat_nuoc',
+					text : 'Quạt nước'
+				}
+			]
+		}
+	}
+	
 	this.$get = function() {
-		return new CommonService(this.urlMap, this.CONSTANTS);
+		return new CommonService(this.urlMap, this.CONSTANTS, this.dataConfig);
 	};
 	
-	function CommonService(urlMap, constants) {
+	function CommonService(urlMap, constants, dataConfig) {
 		this.CONSTANTS = constants;
 		this.urlMap = urlMap;
+		this.dataConfig = dataConfig;
 		this.baseURL = baseURL //global variable
 	};
 	
@@ -216,11 +187,24 @@ var commonModule = angular.module('commonModule', [])
 	 * @param  {Object} des the object have attribute values will be updated by {@code src}
 	 */
 	CommonService.prototype.copyValueFromOther = function copyValueFromOther (src, des) {
-		for (var k in src) {
-			if(angular.isObject(src[k])){
-				this.copyValueFromOther(src[k], des[k]);
+		for (var prop in des) {
+			delete des[prop];
+		};
+		for (var prop in src) {
+			if(angular.isObject(src[prop])){
+				this.copyValueFromOther(src[prop], des[prop]);
 			}else
-				des[k] = src[k];
+				des[prop] = src[prop];
+		};
+	}
+	
+	/**
+	*	delete all property of object.
+	* 	result will be {}
+	*/
+	CommonService.prototype.cleanAllProperty = function cleanAllProperty (obj) {
+		for (var prop in obj) {
+			delete obj[prop];
 		};
 	}
 	
@@ -260,6 +244,17 @@ var commonModule = angular.module('commonModule', [])
             }
         }
         return undefined;
+    };
+	
+	CommonService.prototype.convertURIToFiles = function(base64Data, fileName){
+		var base64Decode = atob(base64Data);
+		var ab = new ArrayBuffer(base64Decode.length);
+		var ia = new Uint8Array(ab);
+		for (var i = 0; i < base64Decode.length; i++) {
+			ia[i] = base64Decode.charCodeAt(i);
+		}
+		var blob = new Blob([ia], { type: 'image/jpeg' });
+		return new File([blob], fileName);
     };
 })
 .service('connectorService', ['$q', '$http', '$log', 'commonService', function($q, $http, $log, commonService) {
@@ -338,11 +333,11 @@ var commonModule = angular.module('commonModule', [])
 			$log.debug(param.data);
 			
 			 var formData = new FormData();
-			 angular.forEach(param.data, function (value){
+			 angular.forEach(param.data, function (item){
 				 /*
-				  * value : {name: "testCaseInput", file: file}
+				  * value : {key: "testCaseInput", value: file}
 				  */
-				formData.append(value.name, value.file); 
+				formData.append(item.key, item.value); 
 			 });
 			
 			self.showLoadingBar();

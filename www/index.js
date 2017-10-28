@@ -2,9 +2,9 @@
 * This file is used to write pure javascript.
 */
 'use strict';
-  
+var slideout;
 window.onload = function() {
-	var slideout = new Slideout({
+	slideout = new Slideout({
 		'panel': document.getElementById('panel'),
 		'menu': document.getElementById('menu'),
 		'padding': 256,
@@ -14,8 +14,4 @@ window.onload = function() {
 	// document.querySelector('.js-slideout-toggle').addEventListener('click', function() {
 	  // slideout.toggle();
 	// });
-	
-	document.querySelector('.menu').addEventListener('click', function(eve) {
-	  if (eve.target.nodeName === 'A') { slideout.close(); }
-	});
 };

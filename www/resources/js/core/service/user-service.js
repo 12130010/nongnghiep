@@ -1,90 +1,68 @@
 'use strict';
-onlinejudgeApp.service('userService', function($http, $q, OAuth, $cookies, connectorService) {
+app.service('userService', ['$q', 'commonService', 'connectorService', function($q, commonService, connectorService) {
 	function UserService(){
 		this.userDetail = {};
-		
-		var now = new Date();
-		
-		//config for persist data into cookie
-		this.config = {
-				name: "userInfo",
-				options: {
-					expires :  new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)
-				}
-		};
 	}
 	
 	UserService.prototype.isAuthenticated = function isAuthenticated(){
-		return OAuth.isAuthenticated();
+		return !$.isEmptyObject(this.userDetail);
 	}
 	
-	UserService.prototype.login = function login(user){
+	/* 
+	Use to login.
+	
+	userLoginModel = {
+				username: String,
+				password: String
+		}
+	*/
+	UserService.prototype.login = function login(userLoginModel){
 		var self = this;
     	var deferred = $q.defer();
     	
-		OAuth.getAccessToken(user).then(function success(response){
-			//persist user email
-			$cookies.putObject(self.config.name, response.data, self.config.options);
-			
-			self.loadUserDetailByEmail().then(function(){
-				deferred.resolve();
-			}, function fail(){
-				deferred.reject();
-			});
+		connectorService.get(
+				{
+					actionName: "USER_LOGIN",
+					actionParams : [userLoginModel.username, userLoginModel.password]
+				}
+		).then(function success(response){
+			//login success: response.data = {"tag":"login","success":1,"error":0,"uid":"59a75a560d5a72.74818691","user":{"name":"seval","email":"seval@test.com","created_at":"2017-08-31 07:37:42","updated_at":null}}
+			//login fail: response.data = {"tag":"login","success":0,"error":1,"error_msg":"Incorrect email or password!"}
+			if(response.data.success === 1){ //login success
+				commonService.copyValueFromOther(response.data.user, self.userDetail);
+				deferred.resolve(self.userDetail);
+			} else { // login fail
+				deferred.reject(response.data);
+			}
 		}, function error(response){
-			deferred.reject(response);
+			deferred.reject(response.data);
 		});
 		
 		return deferred.promise; 
 	}
 	UserService.prototype.logout = function logout(){
 		var self = this;
-		var deferred = $q.defer();
+    	var deferred = $q.defer();
 		
-		OAuth.revokeToken().then(function(){
-			deferred.resolve();
-		});
+		commonService.cleanAllProperty(this.userDetail);
+		//TODO clean all data
 		
-		return deferred.promise; 
+		return $q.when({}); 
 	}
 	
 	UserService.prototype.refresh = function refresh(){
 		var self = this;
     	var deferred = $q.defer();
-		OAuth.getRefreshToken().then(function success(response){
-			OAuth.user = response.data;
-			deferred.resolve();
-		}, function error(response){
-			deferred.reject();
-		});
+		
 		
 		return deferred.promise; 
 	}
 	
 	//load user have login
 	UserService.prototype.loadUserDetail = function loadUserDetail(){
-		var user = $cookies.getObject(this.config.name);
-		return this.loadUserDetailByEmail();
+		return {};
 	}
 	
-	UserService.prototype.loadUserDetailByEmail = function loadUserDetailByEmail(){
-		var self = this;
-		var deferred = $q.defer();
-		
-		connectorService.get(
-				{
-					actionName: "USER_GET_USER_DETAIL",
-					actionParams : []
-				}
-		).then(function success(response){
-			angular.extend(self.userDetail, response.data);
-			deferred.resolve(self.userDetail);
-		}, function error(response){
-			deferred.reject();
-		});
-		
-		return deferred.promise; 
-	}
 	
 	UserService.prototype.register = function register(user){
 		var self = this;
@@ -123,4 +101,4 @@ onlinejudgeApp.service('userService', function($http, $q, OAuth, $cookies, conne
 		return deferred.promise; 
 	}
 	return new UserService();
-});
+}]);

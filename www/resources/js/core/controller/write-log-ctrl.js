@@ -21,7 +21,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 			$scope.getUnitInfo($scope.qrData.text);
 		}
 		
-		$scope.note = "Note!!";
+		$scope.note = "";
 	};
 	
 	$scope.getActionByUnitType = function (unitType) {
@@ -32,31 +32,55 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 	$scope.chooseAcction = function (action) {
 		var self = $scope;
 		
+		if (self.action) {
+			if (action == self.action) //choose action again => do not thing.
+				return;
+			// clear old data.
+			self.showImage=false;
+			self.imageFile = undefined;
+		}
+		
 		self.action = action;
 		
 		if(action.hasOwnProperty('needImage') && action.needImage) {
-			captureService.capture(25).then( function (imageURI) {
-				$scope.showImage=true;
-				var image = document.getElementById('capturedImage');
-				image.src ="data:image/png;base64," + imageURI;
-				
-				self.imageFile = commonService.convertURIToFiles(imageURI, "capture.jpg");
-			}, function (errorMessage) {
-				alert(errorMessage);
-			})
-		} else {
-			alert("SEND DATA:\n" +
-				"maqr:" + self.qrData.text + "; " + 
-				"hd:" + action.key);
-		}
+			self.captureImage();
+		};
 	};
+	
+	$scope.captureImage = function (message) {
+		var self = $scope;
+		
+		var buttonLabels = ["Chụp ảnh", "Thư viện", "Hủy chọn"];
+		var typeCapture = [Camera.PictureSourceType.CAMERA, Camera.PictureSourceType.PHOTOLIBRARY];
+		
+		message = message || "Bạn muốn chọn ảnh từ?";
+		
+		navigator.notification.confirm(message, function (indexButton) {
+			if (indexButton > 0 && indexButton < buttonLabels.length) {
+				
+				captureService.capture(typeCapture[indexButton-1], 25).then( function (imageURI) {
+					self.showImage=true;
+					var image = document.getElementById('capturedImage');
+					image.src ="data:image/png;base64," + imageURI;
+					
+					self.imageFile = commonService.convertURIToFiles(imageURI, "capture.jpg");
+				}, function (errorMessage) {
+					alert(errorMessage);
+				});
+			}
+		}, "Chọn ảnh", buttonLabels);	
+	}
 	
 	$scope.getUnitInfo = function (unitId) {
 		var self = $scope;
-			unitService.getUnit(unitId).then(function (unit) {
-				self.unit = unit;
-				self.actions = self.getActionByUnitType(unit.type);
-			});
+		//unitService.getUnit(unitId).then(function (unit) {
+		//	self.unit = unit;
+		//	self.actions = self.getActionByUnitType(unit.type);
+		//});
+		
+		var unit = {name:"Nong trai", type : "cn"};
+		self.unit = unit;
+		self.actions = self.getActionByUnitType(unit.type);
 	};
 	
 	$scope.addHistory = function () {

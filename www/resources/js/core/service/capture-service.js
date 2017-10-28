@@ -3,7 +3,7 @@ app.service('captureService', ['$q', 'commonService', function($q, commonService
 	function CaptureService(){
 	}
 
-	CaptureService.prototype.capture = function scan(quality){
+	CaptureService.prototype.capture = function scan(type, quality){
 		var self = this;
 		var deferred = $q.defer();
 		
@@ -14,9 +14,13 @@ app.service('captureService', ['$q', 'commonService', function($q, commonService
 			var onFail = function (message) {
 				deferred.reject(message);
 			};
-			navigator.camera.getPicture(onSuccess, onFail, { quality: quality || 100,
-				destinationType: Camera.DestinationType.DATA_URL
-			});
+			navigator.camera.getPicture(onSuccess, onFail, 
+				{ 	
+					quality: quality || 100,
+					destinationType: Camera.DestinationType.DATA_URL,
+					sourceType: type
+				}
+			);
 		} else{
 		   deferred.reject("camera not found");
 		}		

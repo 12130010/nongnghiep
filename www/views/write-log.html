@@ -9,11 +9,16 @@
 				ng-click="chooseAcction(action)">{{action.text}}</a>
 		</div>
 		
-		<div ng-show="showImage">
-			<img id="capturedImage" style="height:200px;width:200px"></img>
-			<h5>Ghi chú:</h5>
-			<input ng-model="note"></input>
+		
+		<div ng-show="action"> <!-- only show if they choose action -->
+			<p>Hành động được chọn: {{action.text}}</p>
+			<div ng-show="showImage">
+				<img id="capturedImage" style="height:200px;width:200px"></img>
+			</div>
+			<button ng-click="captureImage()">Chọn ảnh</button>
+			<br/>
+			<label>Ghi chú:</label><input ng-model="note"></input>
+			<button ng-click="addHistory()" class="btn btn-success">Thêm nhật ký</button>
 		</div>
-		<button ng-click="addHistory()">Thêm nhật ký</button>
 	</div>
 </div>

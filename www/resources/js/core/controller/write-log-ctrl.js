@@ -2,6 +2,13 @@
 
 var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService', 'captureService', 'unitService',
 				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService ,  unitService){
+					
+	this.$onInit = function () {
+		document.removeEventListener("backbutton", $scope.onBackKeyDown);  
+			 
+		init();
+	};
+	
 	function init(){
 		if (window.cordova) {
 			qrscannerService.scan().then(function (result) {
@@ -11,6 +18,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 						$scope.getUnitInfo($scope.qrData.text);
 					}
 				 } else { //result.cancelled
+					document.addEventListener("backbutton", $scope.onBackKeyDown, false); 
 					$state.go('home');
 				 }
 			}, function (error) { 
@@ -63,7 +71,8 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 					var image = document.getElementById('capturedImage');
 					image.src ="data:image/png;base64," + imageURI;
 					
-					self.imageFile = commonService.convertURIToFiles(imageURI, "capture.jpg");
+					//self.imageFile = commonService.convertURIToFiles(imageURI, "capture.jpg");
+					self.imageFile = imageURI;
 				}, function (errorMessage) {
 					alert(errorMessage);
 				});
@@ -85,41 +94,26 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 	
 	$scope.addHistory = function () {
 		var self = $scope;
-		var data = [
+		var data =
 			{
-				key : "userId",
-				value : "nhuocquy"
-			},
-			{
-				key : "unitId",
-				value : self.qrData.text
-			},
-			{
-				key : "actionType",
-				value : self.action.key
-			},
-			{
-				key : "note",
-				value : self.note
-			},
-			{
-				key : "longtitude",
-				value : "123"
-			},
-			{
-				key : "latitude",
-				value : "234"
-			},
-			{
-				key : "files",
-				value : self.imageFile
-			}
-		];
+				"userid": "nhuocquy",
+				"maqr" : self.qrData.text,
+				"hd" : self.action.key,
+				"gctext" : self.note,
+				"gcpic" : self.imageFile
+			};
 		
 		unitService.addHistory(data).then( function () {
-			alert("Thêm thành công");
+			navigator.notification.alert(
+				'Thêm nhật ký thành công',  // message
+				function () { // callback
+					document.addEventListener("backbutton", $scope.onBackKeyDown, false); 
+					$state.go('home');
+				},        
+				'Thông báo',            // title
+				'Xong'                  // buttonName
+			);
 		});
 	};
 	
-	init();
 }];

@@ -26,7 +26,7 @@ app.service('unitService', ['$q', 'commonService', 'connectorService', function(
 		var self = this;
     	var deferred = $q.defer();
     	
-		connectorService.postResource(
+		connectorService.postForm(
 				{
 					actionName: "UNIT_ADD_HISTORY",
 					actionParams : [],

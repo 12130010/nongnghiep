@@ -15,7 +15,7 @@ var commonModule = angular.module('commonModule', [])
 			"params" : ["unitId"]
 		},
 		"UNIT_ADD_HISTORY" : {
-			"baseUrl" : "/action/",
+			"baseUrl" : "/nhatky.php",
 			"params" : []
 		}
 	}
@@ -257,7 +257,7 @@ var commonModule = angular.module('commonModule', [])
 		return new File([blob], fileName);
     };
 })
-.service('connectorService', ['$q', '$http', '$log', 'commonService', function($q, $http, $log, commonService) {
+.service('connectorService', ['$q', '$http', '$log', 'commonService', '$httpParamSerializerJQLike', function($q, $http, $log, commonService, $httpParamSerializerJQLike) {
 		function ConnectorService() {
 			this.loadingBarCounter = 0;
 		}
@@ -358,7 +358,42 @@ var commonModule = angular.module('commonModule', [])
 					});
 			
 			return deferred.promise;
-		}
+		};
+		
+		/**
+		 * Main function, which call the underline connector
+		 * @param 	{object}		params 					input for executing actions, which has properties:
+		 * @param 	{string}		params.actionName 		the action which connector need to execute
+		 * @param 	{array}			params.actionParams 	array of actionParams
+		 * @param 	{object}		params.data 			array of file, file is {name: "testCaseInput", file: file}
+		 * @return an Angular Promise instance
+		 */
+		ConnectorService.prototype.postForm = function postResource(param){
+			var self = this;
+			var deferred = $q.defer();
+			
+			$log.debug("Call with actionName: " + param.actionName + ", and actionParams: " + param.actionParams);
+			$log.debug(param.data);
+						
+			self.showLoadingBar();
+			$http.post(commonService.getUrl(commonService.urlMap[param.actionName], param.actionParams),
+						$httpParamSerializerJQLike(param.data),
+						{ //config
+							transformRequest: angular.identity,
+				            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+						} 
+					).then( function success( response ){
+						$log.debug(response);
+						self.hideLoadingBar();
+						deferred.resolve(response);
+					}, function fail(response){
+						$log.debug(response);
+						self.hideLoadingBar();
+						deferred.reject(response);
+					});
+			
+			return deferred.promise;
+		};
 		
 		ConnectorService.prototype.showLoadingBar = function showLoadingBar(){
 			this.loadingBarCounter++;

@@ -87,6 +87,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 	 
 	 var loaddingBarCounter = 0;
 	 
+	 $scope.onBackKeyDown = function onBackKeyDown(e) {
+		if ($state.is('home')) {
+		   e.preventDefault(); 
+		   navigator.app.exitApp();
+		}
+	 };
+		
+	 this.$onInit = function () {
+		 document.addEventListener("backbutton", $scope.onBackKeyDown, false);  
+		
+	 };
+	 
 	 $rootScope.logout = function logout(){
 		 userService.logout().then(function success(){
 			 $state.go("home.login");

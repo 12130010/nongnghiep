@@ -7,12 +7,15 @@ var commonModule = angular.module('commonModule', [])
 	this.urlMap = {
 		// User Service
 		"USER_LOGIN" : {
-			"baseUrl" : "?tag=login&email={0}&password={1}",
-			"params" : ["email", "password"]
+			"baseUrl" : "/android/login.php",
+			"params" : ["tag", "email", "password"]
+		},"USER_CREATE_NEW_USER" : {
+			"baseUrl" : "/android/register.php",
+			"params" : ["tag", "email", "password", "name"]
 		},
 		"UNIT_GET" : {
-			"baseUrl" : "/unit/{0}",
-			"params" : ["unitId"]
+			"baseUrl" : "/nk/?id={0}",
+			"params" : ["id"]
 		},
 		"UNIT_ADD_HISTORY" : {
 			"baseUrl" : "/nhatky.php",

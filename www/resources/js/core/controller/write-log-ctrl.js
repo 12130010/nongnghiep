@@ -1,7 +1,7 @@
 'use strict';
 
 var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService', 'captureService', 'unitService',
-				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService ,  unitService){
+				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService ,  unitService ){
 					
 	this.$onInit = function () {
 		document.removeEventListener("backbutton", $scope.onBackKeyDown);  
@@ -15,7 +15,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 				 if(!result.cancelled){
 					if(result.format == "QR_CODE"){
 						$scope.qrData = {text : result.text};
-						$scope.getUnitInfo($scope.qrData.text);
+						$scope.getUnitInfo(result.text);
 					}
 				 } else { //result.cancelled
 					document.addEventListener("backbutton", $scope.onBackKeyDown, false); 
@@ -26,7 +26,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 			});
 		} else { // mock data
 			$scope.qrData = {text : '59eb3ba8e4e29a1fb810fd7d'};
-			$scope.getUnitInfo($scope.qrData.text);
+			$scope.getUnitInfo('7');
 		}
 		
 		$scope.note = "";
@@ -82,22 +82,21 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 	
 	$scope.getUnitInfo = function (unitId) {
 		var self = $scope;
-		//unitService.getUnit(unitId).then(function (unit) {
-		//	self.unit = unit;
-		//	self.actions = self.getActionByUnitType(unit.type);
-		//});
 		
-		var unit = {name:"Nong trai", type : "cn"};
-		self.unit = unit;
-		self.actions = self.getActionByUnitType(unit.type);
+		unitId = unitId.substring(unitId.indexOf("=")+1);
+		
+		unitService.getUnit(unitId).then(function (unit) {
+			self.unit = unit;
+			self.actions = self.getActionByUnitType(unit.type);
+		});
 	};
 	
 	$scope.addHistory = function () {
 		var self = $scope;
 		var data =
 			{
-				"userid": "nhuocquy",
-				"maqr" : self.qrData.text,
+				"userid": self.userDetail.email,
+				"maqr" : self.unit.id,
 				"hd" : self.action.key,
 				"gctext" : self.note,
 				"gcpic" : self.imageFile

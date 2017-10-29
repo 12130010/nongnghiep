@@ -9,18 +9,24 @@ var loginController = function ($state, $scope, userService){
 		
 		//init user model
 		$scope.user = 	{
-				username: "seval@test.com",
-				password: "12345"
+				username: "nhuocquy@gmail.com",
+				password: "1234"
 		};
 	}
 	
 	init();
 	
 	$scope.login = function login(){
-		userService.login($scope.user).then(function(response){
+		userService.login($scope.user).then(function(user){
 			$state.go("home");
-		}, function error(){
-			 alert("Username and password were not correct!");
+		}, function error(data){
+			 navigator.notification.alert(
+				data.error_msg,  // message
+				function () { // callback
+				},        
+				'Thông báo',            // title
+				'Ok'                  // buttonName
+			);
 		});
 	}
 	

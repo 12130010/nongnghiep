@@ -83,7 +83,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 	$scope.getUnitInfo = function (unitId) {
 		var self = $scope;
 		
-		unitId = unitId.substring(unitId.indexOf("=")+1);
+		//unitId = unitId.substring(unitId.indexOf("=")+1);
 		
 		unitService.getUnit(unitId).then(function (unit) {
 			self.unit = unit;

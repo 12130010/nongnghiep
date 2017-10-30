@@ -1,0 +1,12 @@
+<div class="text-center">
+	<div class="col-xs-12">
+		<p>Đơn vị: {{unitHistory.name}}</p>
+		<div class="col-xs-12" ng-repeat="nhatky in unitHistory.nhatky" style="text-align: left;">
+			<p>--------------</p>
+			<p>Ngày: {{nhatky.ngay}}</p>
+			<p>Hành động: {{nhatky.hd}}</p>
+			<p>Ghi chú: {{nhatky.ghichu}}</p>
+			<button ng-if="nhatky.hinh" ng-click="showImage(nhatky.hinh)">Xem hình</button>
+		</div>
+	</div>
+</div>

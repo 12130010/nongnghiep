@@ -17,6 +17,10 @@ var commonModule = angular.module('commonModule', [])
 			"baseUrl" : "/nk/?id={0}",
 			"params" : ["id"]
 		},
+		"UNIT_GET_HISTORY" : {
+			"baseUrl" : "/viewnhatky.php?id={0}",
+			"params" : ["id"]
+		},
 		"UNIT_ADD_HISTORY" : {
 			"baseUrl" : "/nhatky.php",
 			"params" : []

@@ -3,10 +3,8 @@
 </header>
 <h3 class="menu-section-title">Chức năng</h3>
 <ul class="menu-section-list">
-  <li><a>Chức năng 1</a></li>
-  <li><a>Chức năng 2</a></li>
-  <li><a>Chức năng 2</a></li>
-  <li><a>Chức năng 3</a></li>
+  <li ng-if="isAuthenticated()"><a ui-sref="home.writelog">Ghi nhật ký</a></li>
+  <li><a ui-sref="home.viewlog">Xem nhật ký</a></li>
 </ul>
 
 <section class="menu-section">

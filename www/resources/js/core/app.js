@@ -70,6 +70,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 				label: "Ghi nhật ký"
 			}
 		})
+		.state('home.viewlog', {
+			url: 'viewlog',
+			views: {
+				'main@': {
+					templateUrl: 'views/view-log.html',
+					controller: viewLogController
+				}
+			},
+			ncyBreadcrumb: {
+				label: "Xem nhật ký"
+			}
+		})
 	}
 ])
 .config(function($sceDelegateProvider) { //TODO check whether it necesary or not.
@@ -91,11 +103,13 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 		if ($state.is('home')) {
 		   e.preventDefault(); 
 		   navigator.app.exitApp();
+		} else {
+			return true;
 		}
 	 };
 		
 	 this.$onInit = function () {
-		 document.addEventListener("backbutton", $scope.onBackKeyDown, false);  
+		 //document.addEventListener("backbutton", $scope.onBackKeyDown, false);  
 		
 	 };
 	 

@@ -32,11 +32,6 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 		$scope.note = "";
 	};
 	
-	$scope.getActionByUnitType = function (unitType) {
-		var self = this;
-		return commonService.dataConfig.action[unitType];
-	};
-	
 	$scope.chooseAcction = function (action) {
 		var self = $scope;
 		
@@ -50,7 +45,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 		
 		self.action = action;
 		
-		if(action.hasOwnProperty('needImage') && action.needImage) {
+		if(action.actionName.indexOf('*') == 0) {
 			self.captureImage();
 		};
 	};
@@ -87,7 +82,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 		
 		unitService.getUnit(unitId).then(function (unit) {
 			self.unit = unit;
-			self.actions = self.getActionByUnitType(unit.type);
+			self.actions = unit.hd;
 		});
 	};
 	
@@ -97,7 +92,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 			{
 				"userid": self.userDetail.email,
 				"maqr" : self.unit.id,
-				"hd" : self.action.key,
+				"hd" : self.action.actionName.replace('*',''),
 				"gctext" : self.note,
 				"gcpic" : self.imageFile
 			};

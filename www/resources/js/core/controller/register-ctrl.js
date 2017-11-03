@@ -20,7 +20,7 @@ var registerController = function ($state, $scope, commonService, userService){
 		
 		userService.register(user).then(function success(){
 			navigator.notification.alert(
-				"Register success! Please check mail to verify account and login again!",  // message
+				"Tài khoản bạn đã đăng ký thành công - vui lòng kiểm tra hộp thư inbox hoặc spam để xem thông tin hướng dẫn các bước kế tiếp!",  // message
 				function () { // callback
 					$state.go("home");
 				},        

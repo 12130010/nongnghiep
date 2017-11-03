@@ -31,62 +31,6 @@ var commonModule = angular.module('commonModule', [])
 			
 	}
 	
-	this.dataConfig = {
-		action : {
-			tt: [
-				{
-					key : 'trong',
-					text : 'Trồng',
-					needImage : true
-				},
-				{
-					key : 'tuoi',
-					text : 'Tưới'
-				},
-				{
-					key : 'xit_thuoc',
-					text : 'Xịt thuốc'
-				},
-				{
-					key : 'cham_soc',
-					text : 'Chăm sóc'
-				},
-				{
-					key : 'thu_hoach',
-					text : 'Thu hoạch'
-				}
-			],
-			cn: [
-				{
-					key : 'cho_an',
-					text : 'Cho ăn',
-					needImage : true
-				},
-				{
-					key : 'chich_thuoc',
-					text : 'Chích thuốc'
-				},
-				{
-					key : 'tam',
-					text : 'Tắm'
-				}
-			],
-			ts: [
-				{
-					key : 'cho_an',
-					text : 'Cho ăn'
-				},
-				{
-					key : 'don_ho',
-					text : 'Dọn hồ'
-				},
-				{
-					key : 'quat_nuoc',
-					text : 'Quạt nước'
-				}
-			]
-		}
-	}
 	
 	this.$get = function() {
 		return new CommonService(this.urlMap, this.CONSTANTS, this.dataConfig);

@@ -13,24 +13,23 @@ app.service('fileService', ['$q', 'commonService', function($q, commonService) {
 	
 	FileService.prototype.isExist = function (path, isDirectory) {
     	var deferred = $q.defer();
+		 
+		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, function(fileSystem){
+			
+		var fileExists =  function fileExists (fileEntry) {
+				deferred.resolve(true);
+		};
 		
-		document.addEventListener("deviceready", function() { 
-			window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, function(fileSystem){
-				var fileExists =  function fileExists (fileEntry) {
-						deferred.resolve(true);
-				};
-				
-				var fileDoesNotExist = function fileDoesNotExist (e) {
-						deferred.resolve(false);
-				};
-				
-				if(isDirectory) {
-					fileSystem.getDirectory(path, { create: false }, fileExists, fileDoesNotExist);
-				} else {
-					fileSystem.getFile(path, { create: false }, fileExists, fileDoesNotExist);
-				}
-			}, FileService.prototype.getFSFail);
-		}, false);
+		var fileDoesNotExist = function fileDoesNotExist (e) {
+				deferred.resolve(false);
+		};
+		
+		if(isDirectory) {
+			fileSystem.getDirectory(path, { create: false }, fileExists, fileDoesNotExist);
+		} else {
+			fileSystem.getFile(path, { create: false }, fileExists, fileDoesNotExist);
+		}
+	}, FileService.prototype.getFSFail);
 		
 		return deferred.promise; 
 	};
@@ -48,15 +47,13 @@ app.service('fileService', ['$q', 'commonService', function($q, commonService) {
 			deferred.reject(false);
 		};
 		
-		document.addEventListener("deviceready", function() { 
-		   window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, function successCallback (fileSystem) {
-			    if(isDirectory) {
-					fileSystem.getDirectory(fileName, {create: true, exclusive: true}, createFileSuccess, createFileFail);
-				} else {
-					fileSystem.getFile(fileName, {create: true, exclusive: true}, createFileSuccess, createFileFail);
-				}
-		   }, FileService.prototype.getFSFail);
-		}, false);
+		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, function successCallback (fileSystem) {
+			if(isDirectory) {
+				fileSystem.getDirectory(fileName, {create: true, exclusive: true}, createFileSuccess, createFileFail);
+			} else {
+				fileSystem.getFile(fileName, {create: true, exclusive: true}, createFileSuccess, createFileFail);
+			}
+		}, FileService.prototype.getFSFail);
 		
 		return deferred.promise; 
 	};
@@ -64,10 +61,7 @@ app.service('fileService', ['$q', 'commonService', function($q, commonService) {
 	FileService.prototype.writeFile = function (filePath, data, dataType) {
 		var deferred = $q.defer();
 		
-		document.addEventListener("deviceready", function() { 
-			window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, successCallback, errorCallback);
-		});
-		
+		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, successCallback, errorCallback);
 
 		function successCallback(fs) {
 		  fs.getFile(filePath, {create: true}, function(fileEntry) {
@@ -98,11 +92,8 @@ app.service('fileService', ['$q', 'commonService', function($q, commonService) {
 	FileService.prototype.readFile = function (filePath) {
 		var deferred = $q.defer();
 		
-		document.addEventListener("deviceready", function() { 
-			window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, successCallback, errorCallback);
-		});
+		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, successCallback, errorCallback);
 		
-
 		function successCallback(fs) {
 			fs.getFile(filePath, {}, function(fileEntry) {
 
@@ -128,24 +119,22 @@ app.service('fileService', ['$q', 'commonService', function($q, commonService) {
 	FileService.prototype.deleteFile = function (filePath, isDirectory) {
 		var deferred = $q.defer();
 		
-		document.addEventListener("deviceready", function() { 
-			window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, function(fileSystem){
-				if(isDirectory) {
-					fileSystem.getDirectory(filePath, {create: false}, function(fileEntry) {
-						fileEntry.remove(function() {
-							deferred.resolve(true);
-						}, FileService.prototype.getFSFail);
+		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory, function(fileSystem){
+			if(isDirectory) {
+				fileSystem.getDirectory(filePath, {create: false}, function(fileEntry) {
+					fileEntry.remove(function() {
+						deferred.resolve(true);
 					}, FileService.prototype.getFSFail);
-				} else {
-					fileSystem.getFile(filePath, {create: false}, function(fileEntry) {
-						fileEntry.remove(function() {
-							deferred.resolve(true);
-						}, FileService.prototype.getFSFail);
+				}, FileService.prototype.getFSFail);
+			} else {
+				fileSystem.getFile(filePath, {create: false}, function(fileEntry) {
+					fileEntry.remove(function() {
+						deferred.resolve(true);
 					}, FileService.prototype.getFSFail);
-			  }
-			}, FileService.prototype.getFSFail);
-		}, false);
-		
+				}, FileService.prototype.getFSFail);
+		  }
+		}, FileService.prototype.getFSFail);
+			
 		return deferred.promise; 
 	};
 	
@@ -167,11 +156,11 @@ app.service('fileService', ['$q', 'commonService', function($q, commonService) {
 			   }
 		   
 		   }
-		}
+		};
 
 		function onFailCallback(e){
 			console.error(e);
-		}
+		};
 	};
 	
 	return new FileService();

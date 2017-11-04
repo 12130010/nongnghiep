@@ -29,7 +29,7 @@
 		<script type="text/javascript" src="resources/js/lib/slideout.js"></script>
 		<script type="text/javascript" src="cordova.js"></script>
 	</head> 
-	<body ng-app="app" ng-controller="mainController" id="onlinejudgeApp" data-gr-c-s-loaded="true">
+	<body ng-controller="mainController" id="nongnghiepApp" data-gr-c-s-loaded="true">
 		<div id="ipos-full-loading" class="ipos_popup_overlay" style="
 	    width: 100%;
 	    height: 100%;
@@ -53,6 +53,7 @@
 		</nav>
 		<main id="panel" >
 			<div ncy-breadcrumb></div>
+			<div id="noInternet">Không có kết nối internet!!</div>
 			<div ui-view="main" class="container"></div>
 			<div ui-view="footer" ></div>
 		</main>
@@ -68,6 +69,7 @@
 		<script type="text/javascript" src="resources/js/core/service/qrscanner-service.js"></script>
 		<script type="text/javascript" src="resources/js/core/service/capture-service.js"></script>
 		<script type="text/javascript" src="resources/js/core/service/file-service.js"></script>
+		<script type="text/javascript" src="resources/js/core/service/network-service.js"></script>
 		<script type="text/javascript" src="resources/js/core/controller/login-ctrl.js"></script>
 		<script type="text/javascript" src="resources/js/core/controller/left-menu-ctrl.js"></script>
 		<script type="text/javascript" src="resources/js/core/controller/write-log-ctrl.js"></script>

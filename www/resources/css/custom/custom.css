@@ -127,8 +127,13 @@ span.input-group-addon i {
 
 .navbar, .breadcrumb{
     border-radius: 0px;
+	 margin-bottom: 0;
  }
 
-#onlinejudgeApp td,#onlinejudgeApp th {
- 	vertical-align: inherit
- }
+#noInternet {
+	background-color: red;
+	margin-bottom: 20px;
+	text-align: center;
+	color: white;
+}
+ 

@@ -1,6 +1,7 @@
 'use strict';
-app.service('unitService', ['$q', 'commonService', 'connectorService', function($q, commonService, connectorService) {
+app.service('unitService', ['$q', 'commonService', 'connectorService', 'fileService', function($q, commonService, connectorService, fileService) {
 	function UnitService(){
+		this.unitDir = 'ndtt';
 	};
 	
 	
@@ -36,6 +37,38 @@ app.service('unitService', ['$q', 'commonService', 'connectorService', function(
 				deferred.resolve(response.data);
 		}, function error(response){
 			deferred.reject(response.data);
+		});
+		
+		return deferred.promise; 
+	};
+	
+	UnitService.prototype.addHistoryOffline = function addHistoryOffline(data){
+		var self = this;
+    	var deferred = $q.defer();
+		
+		var fileName = '/xxx.txt';
+		
+		fileService.isExist(self.unitDir, true).then( function (isExist) {
+			if(!isExist)
+				return fileService.createFile(self.unitDir, true);
+		})
+		.then( function afterCreateNdtt () {
+			return fileService.isExist(self.unitDir + fileName);
+		})
+		.then( function afterCheckExistFile(isExist) {
+			if(!isExist)
+				return fileService.createFile(self.unitDir + fileName);
+		})
+		.then( function afterCreateFile () {
+			return fileService.writeFile(self.unitDir + fileName, JSON.stringify(data));
+		})
+		.then(function afterWriteData () {
+			return fileService.readFile(self.unitDir + fileName);
+		})
+		.then(function success (data) {
+			deferred.resolve(data);
+		}, function fail (e) {
+			deferred.reject(e);
 		});
 		
 		return deferred.promise; 

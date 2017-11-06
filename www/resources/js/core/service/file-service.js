@@ -139,6 +139,8 @@ app.service('fileService', ['$q', 'commonService', function($q, commonService) {
 	};
 	
 	FileService.prototype.listFiles = function listFiles(myPath){
+		var deferred = $q.defer();
+		var result = [];
 		
 		window.resolveLocalFileSystemURL(cordova.file.externalApplicationStorageDirectory + myPath, function (dirEntry) {
 		   var directoryReader = dirEntry.createReader();
@@ -150,17 +152,20 @@ app.service('fileService', ['$q', 'commonService', function($q, commonService) {
 			   var row = entries[i];
 			   var html = '';         
 			   if(row.isDirectory){
-					 alert('Directory' + row.nativeURL+ ' : ' +row.name);
+					 //alert('Directory' + row.nativeURL+ ' : ' +row.name);
 			   }else{
-					 alert('File' + row.nativeURL+ ' : ' +row.name);
+					 //alert('File' + row.nativeURL+ ' : ' +row.name);
+					result.push(row.name);
 			   }
-		   
 		   }
+		   deferred.resolve(result);
 		};
 
 		function onFailCallback(e){
 			console.error(e);
 		};
+		
+		return deferred.promise; 
 	};
 	
 	return new FileService();

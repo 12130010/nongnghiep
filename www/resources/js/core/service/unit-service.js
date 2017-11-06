@@ -42,11 +42,29 @@ app.service('unitService', ['$q', 'commonService', 'connectorService', 'fileServ
 		return deferred.promise; 
 	};
 	
+	UnitService.prototype.getUnitHistory = function getUnitHistory(unitId){
+		var self = this;
+    	var deferred = $q.defer();
+    	
+		connectorService.get(
+				{
+					actionName: "UNIT_GET_HISTORY",
+					actionParams : [unitId]
+				}
+		).then(function success(response){
+				deferred.resolve(response.data);
+		}, function error(response){
+			deferred.reject(response.data);
+		});
+		
+		return deferred.promise; 
+	};
+	
 	UnitService.prototype.addHistoryOffline = function addHistoryOffline(data){
 		var self = this;
     	var deferred = $q.defer();
 		
-		var fileName = '/xxx.txt';
+		var fileName = '/' + new Date().getTime() + '.json';
 		
 		fileService.isExist(self.unitDir, true).then( function (isExist) {
 			if(!isExist)
@@ -74,19 +92,12 @@ app.service('unitService', ['$q', 'commonService', 'connectorService', 'fileServ
 		return deferred.promise; 
 	};
 	
-	UnitService.prototype.getUnitHistory = function getUnitHistory(unitId){
+	UnitService.prototype.getListHistoryOffline = function getListHistoryOffline(){
 		var self = this;
-    	var deferred = $q.defer();
-    	
-		connectorService.get(
-				{
-					actionName: "UNIT_GET_HISTORY",
-					actionParams : [unitId]
-				}
-		).then(function success(response){
-				deferred.resolve(response.data);
-		}, function error(response){
-			deferred.reject(response.data);
+		var deferred = $q.defer();
+		
+		fileService.listFiles(this.unitDir).then( function (listFile) {
+			deferred.resolve(listFile);
 		});
 		
 		return deferred.promise; 

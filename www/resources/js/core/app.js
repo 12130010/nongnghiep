@@ -82,6 +82,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 				label: "Xem nhật ký"
 			}
 		})
+		.state('home.viewlog-unsync', {
+			url: 'viewlog-unsync',
+			views: {
+				'main@': {
+					templateUrl: 'views/view-log-unsync.html',
+					controller: viewLogUnsyncController
+				}
+			},
+			ncyBreadcrumb: {
+				label: "Upload nhật ký"
+			}
+		})
 	}
 ])
 .config(function($sceDelegateProvider) { //TODO check whether it necesary or not.
@@ -93,7 +105,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
   $sceDelegateProvider.resourceUrlBlacklist([
   ]);
 }) 
-.controller('mainController', function($rootScope, $scope, $state, userService) {
+.controller('mainController', function($rootScope, $scope, $state, userService, networkService) {
 	 
 	 $rootScope.userDetail = userService.userDetail;
 	 
@@ -126,9 +138,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 	 $scope.parseInt = parseInt;
 	 
 	 function init(){
-		 if(userService.isAuthenticated()){
+		if(userService.isAuthenticated()){
 			 userService.loadUserDetail();
-		 }
+		}
+		
 	 }
 	 
 	 init();

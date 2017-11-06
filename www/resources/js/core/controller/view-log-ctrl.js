@@ -1,7 +1,7 @@
 'use strict';
 
-var viewLogController = ['$state', '$scope', 'commonService', 'qrscannerService', 'captureService', 'unitService',
-				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService ,  unitService ){
+var viewLogController = ['$state', '$scope', 'commonService', 'qrscannerService', 'captureService', 'unitService', 'fileService',
+				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService , unitService ,  fileService ){
 					
 	this.$onInit = function () {
 		document.removeEventListener("backbutton", $scope.onBackKeyDown); 	 
@@ -23,6 +23,7 @@ var viewLogController = ['$state', '$scope', 'commonService', 'qrscannerService'
 			}, function (error) { 
 				alert("Scanning failed: " + error);
 			});
+			
 		} else { // mock data
 			$scope.qrData = {text : '59eb3ba8e4e29a1fb810fd7d'};
 			$scope.getUnitHistory('7');

@@ -1,7 +1,7 @@
 'use strict';
 
-var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService', 'captureService', 'unitService',
-				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService ,  unitService ){
+var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService', 'captureService', 'unitService', 'fileService',
+				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService ,  unitService ,  fileService){
 					
 	this.$onInit = function () {
 		document.removeEventListener("backbutton", $scope.onBackKeyDown);  
@@ -61,7 +61,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 		navigator.notification.confirm(message, function (indexButton) {
 			if (indexButton > 0 && indexButton < buttonLabels.length) {
 				
-				captureService.capture(typeCapture[indexButton-1], 25).then( function (imageURI) {
+				captureService.capture(typeCapture[indexButton-1], 50).then( function (imageURI) {
 					self.showImage=true;
 					var image = document.getElementById('capturedImage');
 					image.src ="data:image/png;base64," + imageURI;

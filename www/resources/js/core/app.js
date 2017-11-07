@@ -94,6 +94,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 				label: "Upload nhật ký"
 			}
 		})
+		.state('home.view-share', {
+			url: 'view-share',
+			views: {
+				'main@': {
+					templateUrl: 'views/view-share.html',
+					controller: viewShareController
+				}
+			},
+			ncyBreadcrumb: {
+				label: "Chia sẽ"
+			}
+		})
 	}
 ])
 .config(function($sceDelegateProvider) { //TODO check whether it necesary or not.
@@ -107,35 +119,41 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 }) 
 .controller('mainController', function($rootScope, $scope, $state, userService, networkService) {
 	 
-	 $rootScope.userDetail = userService.userDetail;
+	$rootScope.userDetail = userService.userDetail;
 	 
-	 var loaddingBarCounter = 0;
+	var loaddingBarCounter = 0;
 	 
-	 $scope.onBackKeyDown = function onBackKeyDown(e) {
+	$scope.onBackKeyDown = function onBackKeyDown(e) {
 		if ($state.is('home')) {
 		   e.preventDefault(); 
 		   navigator.app.exitApp();
 		} else {
 			return true;
 		}
-	 };
+	};
 		
-	 this.$onInit = function () {
+	this.$onInit = function () {
 		 //document.addEventListener("backbutton", $scope.onBackKeyDown, false);  
+		 
+		 $scope.baseURL = baseURL;
 		
-	 };
+	};
 	 
-	 $rootScope.logout = function logout(){
+	$rootScope.logout = function logout(){
 		 userService.logout().then(function success(){
 			 $state.go("home.login");
 		 });
-	 }
+	}
 	 
-	 $rootScope.isAuthenticated = function isAuthenticated(){
+	$rootScope.isAuthenticated = function isAuthenticated(){
 		return userService.isAuthenticated();
-	 }
+	}
 	 
-	 $scope.parseInt = parseInt;
+	$scope.parseInt = parseInt;
+	 
+	$scope.showImage = function (link) {
+		navigator.app.loadUrl(baseURL + "/" + link, {openExternal : true});
+	};
 	 
 	 function init(){
 		if(userService.isAuthenticated()){

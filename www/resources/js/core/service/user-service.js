@@ -1,7 +1,7 @@
 'use strict';
 app.service('userService', ['$q', 'commonService', 'connectorService', function($q, commonService, connectorService) {
 	function UserService(){
-		this.userDetail = {};
+		this.userDetail = {}; //{"name":"Nhược Quỳ","email":"nhuocquy@gmail.com","created_at":"2017-10-29 23:26:12","updated_at":null}
 	}
 	
 	UserService.prototype.isAuthenticated = function isAuthenticated(){

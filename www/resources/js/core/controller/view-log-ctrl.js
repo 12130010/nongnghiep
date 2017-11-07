@@ -40,8 +40,4 @@ var viewLogController = ['$state', '$scope', 'commonService', 'qrscannerService'
 		});
 	};
 	
-	$scope.showImage = function (link) {
-		navigator.app.loadUrl(baseURL + "/" + link, {openExternal : true});
-	};
-	
 }];

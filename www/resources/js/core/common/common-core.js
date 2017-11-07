@@ -24,6 +24,10 @@ var commonModule = angular.module('commonModule', [])
 		"UNIT_ADD_HISTORY" : {
 			"baseUrl" : "/nhatky.php",
 			"params" : []
+		},
+		"UNIT_SHARE_BY_EMAIL" : {
+			"baseUrl" : "/shares/?userid={0}",
+			"params" : ["userid"]
 		}
 	}
 	

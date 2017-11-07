@@ -13,9 +13,5 @@ var viewLogUnsyncController = ['$state', '$scope', 'commonService', 'qrscannerSe
 			$scope.listHistoryOffline = listHistoryOffline;
 		});
 	};
-	
-	$scope.showImage = function (link) {
-		navigator.app.loadUrl(baseURL + "/" + link, {openExternal : true});
-	};
-	
+
 }];

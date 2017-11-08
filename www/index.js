@@ -16,7 +16,8 @@ window.onload = function() {
 	// });
 	
 	document.addEventListener("deviceready", onDeviceReady, false);
-	function onDeviceReady() {				
+	
+	function onDeviceReady() {
 		angular.bootstrap(document, ['app']);
 	}
 	
@@ -27,4 +28,6 @@ window.onload = function() {
 	document.addEventListener("online", function () {
 		$('#noInternet').css("display","none");
 	}, false);
+	
+	//angular.bootstrap(document, ['app']);
 };

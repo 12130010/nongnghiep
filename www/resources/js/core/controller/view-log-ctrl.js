@@ -10,26 +10,14 @@ var viewLogController = ['$state', '$scope', 'commonService', 'qrscannerService'
 	
 	function init(){
 		if (window.cordova) {
-			qrscannerService.scan().then(function (result) {
-				 if(!result.cancelled){
-					if(result.format == "QR_CODE"){
-						$scope.qrData = {text : result.text};
-						$scope.getUnitHistory(result.text);
-					}
-				 } else { //result.cancelled
-					document.addEventListener("backbutton", $scope.onBackKeyDown, false); 
-					$state.go('home');
-				 }
-			}, function (error) { 
-				alert("Scanning failed: " + error);
+			unitService.getAllUnitFromDB().then(function (recentUnits) {
+				$scope.recentUnits = recentUnits;
 			});
 			
 		} else { // mock data
 			$scope.qrData = {text : '59eb3ba8e4e29a1fb810fd7d'};
 			$scope.getUnitHistory('7');
 		}
-		
-		
 	};
 	
 	$scope.getUnitHistory = function (unitId) {
@@ -37,6 +25,23 @@ var viewLogController = ['$state', '$scope', 'commonService', 'qrscannerService'
 		
 		unitService.getUnitHistory(unitId).then(function (unitHistory) {
 			self.unitHistory = unitHistory;
+		});
+		
+	};
+	
+	$scope.scan = function () {
+		qrscannerService.scan().then(function (result) {
+			 if(!result.cancelled){
+				if(result.format == "QR_CODE"){
+					$scope.qrData = {text : result.text};
+					$scope.getUnitHistory(result.text);
+				}
+			 } else { //result.cancelled
+				document.addEventListener("backbutton", $scope.onBackKeyDown, false); 
+				$state.go('home');
+			 }
+		}, function (error) { 
+			alert("Scanning failed: " + error);
 		});
 	};
 	

@@ -1,5 +1,16 @@
 <div class="text-center">
-	<div class="col-xs-12">
+	<div class="col-xs-12" ng-if="!unitHistory">
+		<button 
+			class="btn btn-primary"
+			ng-repeat="unit in recentUnits"
+			ng-click="getUnitHistory(unit.id)">
+			{{unit.name}}
+		</button>
+	</div>
+	
+	<button ng-click="scan()" class="btn btn-btn-info">Quét mã mới</button>
+
+	<div class="col-xs-12" ng-if="unitHistory">
 		<p>Đơn vị: {{unitHistory.name}}</p>
 		<div class="col-xs-12" ng-repeat="nhatky in unitHistory.nhatky" style="text-align: left;">
 			<p>--------------</p>

@@ -154,6 +154,10 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 	$scope.showImage = function (link) {
 		navigator.app.loadUrl(baseURL + "/" + link, {openExternal : true});
 	};
+	
+	$scope.openNewLink = function (path) {
+		cordova.InAppBrowser.open(baseURL + path, '_blank', 'location=no,zoom=no');
+	};
 	 
 	 function init(){
 		if(userService.isAuthenticated()){

@@ -83,6 +83,8 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 		unitService.getUnit(unitId).then(function (unit) {
 			self.unit = unit;
 			self.actions = unit.hd;
+			
+			unitService.addOrUpdateUnit(unit);
 		});
 	};
 	

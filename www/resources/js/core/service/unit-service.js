@@ -21,14 +21,14 @@ app.service('unitService', ['$q', 'commonService', 'connectorService', 'fileServ
 	};
 	
 	
-	UnitService.prototype.getUnit = function getUnit(unitId){
+	UnitService.prototype.getUnit = function getUnit(unitId, email){
 		var self = this;
     	var deferred = $q.defer();
     	
 		connectorService.get(
 				{
 					actionName: "UNIT_GET",
-					actionParams : [unitId]
+					actionParams : [unitId, email]
 				}
 		).then(function success(response){
 				deferred.resolve(response.data);
@@ -96,13 +96,67 @@ app.service('unitService', ['$q', 'commonService', 'connectorService', 'fileServ
 		.then( function afterCreateFile () {
 			return fileService.writeFile(self.unitDir + fileName, JSON.stringify(data));
 		})
-		.then(function afterWriteData () {
-			return fileService.readFile(self.unitDir + fileName);
+		.then(function success (data) {
+			deferred.resolve(data); // data == true
+		}, function fail (e) {
+			deferred.reject(e);
+		});
+		
+		return deferred.promise; 
+	};
+	
+	UnitService.prototype.getHistoryOffline = function getHistoryOffline(fileName){
+		var self = this;
+    	var deferred = $q.defer();
+		
+		var fileName = '/' + fileName;
+		
+		fileService.isExist(self.unitDir + fileName, false).then( function (isExist) {
+			if(isExist)
+				return fileService.readFile(self.unitDir + fileName);
+		})
+		.then(function success (data) {
+			deferred.resolve(JSON.parse(data));
+		}, function fail (e) {
+			deferred.reject(e);
+		});
+		
+		return deferred.promise; 
+	};
+	
+	
+	UnitService.prototype.removeHistoryOffline = function removeHistoryOffline(fileName){
+		var self = this;
+    	var deferred = $q.defer();
+		
+		var fileName = '/' + fileName;
+		
+		fileService.isExist(self.unitDir + fileName, false).then( function (isExist) {
+			if(isExist)
+				return fileService.deleteFile(self.unitDir + fileName, false);
 		})
 		.then(function success (data) {
 			deferred.resolve(data);
 		}, function fail (e) {
 			deferred.reject(e);
+		});
+		
+		return deferred.promise; 
+	};
+	
+	UnitService.prototype.uploadHistoryOffline = function uploadHistoryOffline(fileName){
+		var self = this;
+    	var deferred = $q.defer();
+		
+		self.getHistoryOffline(fileName)
+		.then(function getHistory(historyData) {
+			return self.addHistory(historyData);
+		})
+		.then(function addSuccess () {
+			return self.removeHistoryOffline(fileName);
+		})
+		.then( function afterRemoveHistory() {
+			deferred.resolve();
 		});
 		
 		return deferred.promise; 
@@ -182,7 +236,7 @@ app.service('unitService', ['$q', 'commonService', 'connectorService', 'fileServ
 	UnitService.prototype.getAllUnitFromDB = function () {
 		var deferred = $q.defer();
 		this.unitDB.transaction(function(transaction) {
-			var executeQuery = "select value from unit";
+			var executeQuery = "select value from unit order by lastTimeLoaded DESC limit 10";
 			transaction.executeSql(executeQuery, [],
 			function(tx, result) {
 				var units = [];
@@ -191,6 +245,26 @@ app.service('unitService', ['$q', 'commonService', 'connectorService', 'fileServ
 				}
 				console.log(units);
 				deferred.resolve(units);
+			},
+			function(error){
+			// Error
+				console.log(error);
+			});
+		});
+		return deferred.promise; 
+	};
+	
+	UnitService.prototype.getUnitFromDB = function (unitId) {
+		var deferred = $q.defer();
+		this.unitDB.transaction(function(transaction) {
+			var executeQuery = "select value from unit where id = ?";
+			transaction.executeSql(executeQuery, [unitId],
+			function(tx, result) {
+				var units = [];
+				for(var i = 0, len = result.rows.length; i < len ; i++) {
+					units.push(JSON.parse(result.rows.item(i).value));
+				}
+				deferred.resolve(units[0]);
 			},
 			function(error){
 			// Error

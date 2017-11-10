@@ -3,8 +3,8 @@
   <li><a ui-sref="home"><span class="glyphicon glyphicon-home"></span> Trang chủ</a></li>
   <li ng-if="::isAuthenticated()"><a ui-sref="home.writelog"><span class="glyphicon glyphicon-pencil"/> Ghi nhật ký</a></li>
   <li><a ui-sref="home.viewlog"><span class="glyphicon glyphicon-list-alt"/> Xem nhật ký</a></li>
-  <li ng-if="::isAuthenticated()"><a ui-sref="home.view-share"><span class="glyphicon glyphicon-globe"/> Chia sẽ</a></li>
-  <!-- <li ng-if="::isAuthenticated()"><a ui-sref="home.viewlog-unsync"><span class="glyphicon glyphicon-list-alt"/> Upload nhật ký</a></li> -->
+  <li ng-if="::isAuthenticated()"><a ui-sref="home.view-share"><span class="glyphicon glyphicon-globe"/> Chia sẻ</a></li>
+  <li ng-if="::isAuthenticated()"><a ui-sref="home.viewlog-unsync"><span class="glyphicon glyphicon-cloud-upload"/> Upload nhật ký</a></li>
 </ul>
 
 <h3 class="menu-section-title">Tài khoản</h3>

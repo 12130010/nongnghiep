@@ -103,7 +103,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 				}
 			},
 			ncyBreadcrumb: {
-				label: "Chia sẽ"
+				label: "Chia sẻ"
 			}
 		})
 	}

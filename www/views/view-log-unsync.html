@@ -1,6 +1,11 @@
 <div class="text-center">
 	<div class="col-xs-12">
-		<p>Danh sách nhật ký cần đồng bộ</p>
+		<p>Danh sách nhật ký cần upload</p>
+		<button ng-if="listHistoryOffline.length > 0" ng-click="upload()">Upload</button>
+		<h2  ng-if="listHistoryOffline.length == 0">Không có dữ liệu cần upload.</h2>
+		
+		<p ng-if="isUploading">Uploading.... {{i + '/' + listHistoryOffline.length}}</p>
+		
 		<div class="col-xs-12" ng-repeat="history in listHistoryOffline" style="text-align: left;">
 			<p>--------------</p>
 			<p>{{history}}</p>

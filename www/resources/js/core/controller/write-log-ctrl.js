@@ -1,7 +1,7 @@
 'use strict';
 
-var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService', 'captureService', 'unitService', 'fileService',
-				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService ,  unitService ,  fileService){
+var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService', 'captureService', 'unitService', 'fileService', 'userService',
+				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService ,  unitService ,  fileService ,  userService){
 					
 	this.$onInit = function () {
 		document.removeEventListener("backbutton", $scope.onBackKeyDown);  
@@ -80,11 +80,30 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 		
 		//unitId = unitId.substring(unitId.indexOf("=")+1);
 		
-		unitService.getUnit(unitId).then(function (unit) {
-			self.unit = unit;
-			self.actions = unit.hd;
-			
-			unitService.addOrUpdateUnit(unit);
+		var promise;
+		if (navigator.connection.type != Connection.NONE) {
+			promise = unitService.getUnit(unitId, userService.userDetail.email);
+		} else {
+			promise = unitService.getUnitFromDB(unitId);
+		}
+		
+		promise.then(function (unit) {
+			if(unit && unit.id && unit.hd){
+				self.unit = unit;
+				self.actions = unit.hd;
+				
+				unitService.addOrUpdateUnit(unit);
+			} else {
+				navigator.notification.alert(
+					'Mã vạch không phù hợp',  // message
+					function () { // callback
+						document.addEventListener("backbutton", $scope.onBackKeyDown, false); 
+						$state.go('home');
+					},        
+					'Thông báo',            // title
+					'Xong'                  // buttonName
+				);
+			}
 		});
 	};
 	
@@ -98,10 +117,23 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 				"gctext" : self.note,
 				"gcpic" : self.imageFile
 			};
+		var promise;
+		if (navigator.connection.type != Connection.NONE) { // connected
+			promise = unitService.addHistory(data);
+		} else {
+			promise = unitService.addHistoryOffline(data);
+		}
+		promise.then( function (data) { //data == true => write data offline
+			var message;
+			
+			if (data === true) {
+				message = "Bạn đang offline. Dữ liệu đã được lưu trữ tạm. Vui lòng upload dữ liệu khi có kết nối mạng.";
+			} else {
+				message = "Thêm nhật ký thành công";
+			}
 		
-		unitService.addHistory(data).then( function () {
 			navigator.notification.alert(
-				'Thêm nhật ký thành công',  // message
+				message,  // message
 				function () { // callback
 					document.addEventListener("backbutton", $scope.onBackKeyDown, false); 
 					$state.go('home');

@@ -151,19 +151,45 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 	 
 	$scope.parseInt = parseInt;
 	 
-	$scope.showImage = function (link) {
-		navigator.app.loadUrl(baseURL + "/" + link, {openExternal : true});
+	$scope.openNewLinkExternal = function (link) {
+		// navigator.app.loadUrl(baseURL + "/" + link, {openExternal : true});
+		if (!link.startsWith("/")){
+			link = "/" + link;
+		}
+		window.open( baseURL + link, '_system');
 	};
 	
-	$scope.openNewLink = function (path) {
+	$scope.openNewLinkInternal = function (path) {
+		if (!path.startsWith("/")){
+			path = "/" + path;
+		}
 		cordova.InAppBrowser.open(baseURL + path, '_blank', 'location=no,zoom=no');
+	};
+	
+	$scope.showImage = function (path) {
+		if (!path.startsWith("/")){
+			path = "/" + path;
+		}
+		cordova.InAppBrowser.open(baseURL + path, '_blank', 'location=no,zoom=yes');
 	};
 	 
 	 function init(){
 		if(userService.isAuthenticated()){
 			 userService.loadUserDetail();
 		}
-		
+		networkService.getVersion()
+		.then(function (versionData) {
+			if(version.localeCompare(versionData.version) < 0){ // have new version
+				var message = "Phần mềm đã có phiên bản mới, vui lòng cập nhật phiên bản mới để có đầy đủ các tính năng mới.";
+				var buttonLabels = ["Cập nhật"];
+			
+				navigator.notification.confirm(message, function (indexButton) {
+					if (indexButton > 0) {
+						$scope.openNewLinkExternal(versionData.link);
+					}
+				}, "Cập nhật phiên bản mới", buttonLabels);	
+			}
+		});
 	 }
 	 
 	 init();

@@ -28,6 +28,10 @@ var commonModule = angular.module('commonModule', [])
 		"UNIT_SHARE_BY_EMAIL" : {
 			"baseUrl" : "/shares/?userid={0}",
 			"params" : ["userid"]
+		},
+		"NET_WORK_GET_VERSION" : {
+			"baseUrl" : "/apps",
+			"params" : []
 		}
 	}
 	

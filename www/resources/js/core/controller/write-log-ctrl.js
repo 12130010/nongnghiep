@@ -1,7 +1,7 @@
 'use strict';
 
-var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService', 'captureService', 'unitService', 'fileService', 'userService',
-				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService ,  unitService ,  fileService ,  userService){
+var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService', 'captureService', 'unitService', 'fileService', 'userService', 'networkService',
+				function ( $state ,  $scope ,  commonService ,  qrscannerService ,  captureService ,  unitService ,  fileService ,  userService ,  networkService){
 					
 	this.$onInit = function () {
 		document.removeEventListener("backbutton", $scope.onBackKeyDown);  
@@ -81,7 +81,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 		//unitId = unitId.substring(unitId.indexOf("=")+1);
 		
 		var promise;
-		if (navigator.connection.type != Connection.NONE) {
+		if (networkService.isConnected()) {
 			promise = unitService.getUnit(unitId, userService.userDetail.email);
 		} else {
 			promise = unitService.getUnitFromDB(unitId);
@@ -118,7 +118,7 @@ var writeLogController = ['$state', '$scope', 'commonService', 'qrscannerService
 				"gcpic" : self.imageFile
 			};
 		var promise;
-		if (navigator.connection.type != Connection.NONE) { // connected
+		if (networkService.isConnected()) { // connected
 			promise = unitService.addHistory(data);
 		} else {
 			promise = unitService.addHistoryOffline(data);

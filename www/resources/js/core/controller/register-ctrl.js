@@ -3,10 +3,10 @@
 var registerController = function ($state, $scope, commonService, userService){
 	//contain information binding with register form.
 	$scope.userData = {
-			name: "Hoàng Nhược Quỳ",
-			email : "hoangnhuocquy@gmail.com",
-			password: "P@ssword123",
-			confirmPassword: "P@ssword123"
+			name: "",
+			email : "",
+			password: "",
+			confirmPassword: ""
 	};
 	
 	$scope.register = function register(){

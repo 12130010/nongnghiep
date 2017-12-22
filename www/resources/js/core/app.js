@@ -163,7 +163,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 		if (!path.startsWith("/")){
 			path = "/" + path;
 		}
-		cordova.InAppBrowser.open(baseURL + path, '_blank', 'location=no,zoom=no');
+		cordova.InAppBrowser.open(baseURL + path, '_blank', 'location=no,zoom=yes');
 	};
 	
 	$scope.showImage = function (path) {

@@ -9,8 +9,8 @@ var loginController = function ($state, $scope, userService){
 		
 		//init user model
 		$scope.user = 	{
-				username: "nhuocquy@gmail.com",
-				password: "1234"
+				username: "",
+				password: ""
 		};
 	}
 	

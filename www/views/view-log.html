@@ -17,7 +17,11 @@
 			<p>Ngày: {{nhatky.ngay}}</p>
 			<p>Hành động: {{nhatky.hd}}</p>
 			<p>Ghi chú: {{nhatky.ghichu}}</p>
-			<button ng-if="nhatky.hinh" ng-click="showImage(nhatky.hinh)">Xem hình</button>
+			<a ng-if="nhatky.hinh" ng-click="showImage(nhatky.hinh)">
+				<img ng-src="{{baseURL + '/' + nhatky.hinh}}" style="width: 100%;"/>
+			</a>
+			<!-- <button ng-if="nhatky.hinh" ng-click="showImage(nhatky.hinh)">Xem hình</button> -->
 		</div>
+		<div style="height: 100px;" class="col-xs-12 ng-scope"></div>
 	</div>
 </div>
